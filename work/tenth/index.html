@@ -68,6 +68,104 @@
       //
       //
       //
+      (function() {
+        // 検索状態の制御をするためのオブジェクト
+        var searchObj = {
+          word: '',
+          currentPage: 1
+        };
+
+        // エラーなどの表示を行う 
+        var showMessage = function(message) {
+          $('.lists').children().remove();
+          $('.lists').html(
+            $(`<pre class="lists__message">` + message + `</pre>`)
+            .css('text-align', 'center'));
+        };
+
+        // 取得した JSON データを整形して出力する
+        var showResult = function(data) {
+          if (data.count === 0) { // 検索結果のカウントが 0 
+            showMessage("検索結果がありませんでした。\n別のキーワードをお試しください。");
+          } else {
+            if (searchObj.currentPage === 1) { // currentPage ===1 -> 検索ワードが変わったとき
+              $('.lists').children().remove(); // リストの内容を消去
+            }
+            var div = $('<div>'); // 20件ごとの結果の入れ物
+            $.each(data.Items, function (index, item) {
+              div.append(
+                `<li class='lists__item'>
+                <div class='lists__item__inner'>
+                  <a href='` + item.itemUrl + `' class='lists__item__link' target='_blank'>
+                    <img src='` + item.largeImageUrl + `' class='lists__item__img' alt='`+item.title+`'>
+                    <p class='lists__item__detail'>作品名： `+item.title+`</p>
+                    <p class='lists__item__detail'>作者  ： `+item.author+`</p>
+                    <p class='lists__item__detail'>出版社： `+item.publisherName+`</p>
+                  </a>
+                </div>
+                </li>`
+              );
+            })
+            $('.lists').prepend(
+              div.unwrap() // 入れ物から取り出した中身(結果のリスト)をリストに追加
+            );
+          }
+        }
+
+        // エラーの表示を行う
+        var showError = function (res) {
+          console.log(res);
+          switch (res.error) {
+            case "wrong_parameter":
+              showMessage("検索ワードが正しくありません。\n別のキーワードをお試しください。");
+              break;
+            case "not_found":
+              showMessage("検索結果が見つかりませんでした。\n別のキーワードをお試しください。")
+              break;
+            case "too_many_requests":
+              showMessage("リクエスト数が上限に達しました。 \nしばらく時間を空けてから、ご利用ください。")
+              break;
+            default:
+              showMessage("何らかのエラーが発生しました。 \nサイト制作者へお問い合わせください。")
+          }
+        };
+
+        // 入力内容に基づき検索を行う
+        var search = function () {
+          var word = $('.search__text__input').val().trim();
+          if (word === '') {
+            return
+          }
+          if (searchObj.word === word) {
+            searchObj.currentPage++;
+          } else {
+            searchObj.word = word;
+            searchObj.currentPage = 1; 
+          }
+
+          $.ajax({
+            url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
+            type: 'GET',
+            datatype: 'json',
+            data: {
+              applicationId: '1019399324990976605', // (今回はこのIDを使用してください)
+              keyword: searchObj.word, // 検索するワード
+              hits: 20,  // 20件ずつ取得
+              page: searchObj.currentPage, // 取得するページ
+              formatVersion: 2 // フォーマットのバージョンを指定
+            },
+          }).done(function(data) {
+            showResult(data);
+          }).fail(function(res) {
+            showError(res.responseJSON);
+          });
+        }
+
+        // クリックイベントの設定
+        $('.search__btn').click(function () {
+          search();
+        })
+      })();
     </script>
   </body>
 </html>
