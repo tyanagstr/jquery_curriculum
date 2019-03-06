@@ -70,15 +70,71 @@
 <script src="../../common/js/jquery.js"></script>
 <script>
 // 第1問  id='q1'の要素の文字色を赤色にせよ。
+  $('#q1').css('color', '#f00'); // id="q1" の要素にスタイル { color: #f00 } を設定
+
 // 第2問  id='q2'の要素をクリックしたら背景色をピンクにせよ。
+  $('#q2').click(function () { // id="q2" にクリックイベントを設定
+    $(this)                              // 呼び出し元の要素 (#q2) を指定
+      .parent()                          // 親要素を選択
+      .css('background-color', '#fbb');  // スタイル { background-color: #fbb } を設定
+  });
+
 // 第3問  id='q3'の要素をクリックしたら2秒かけてフェードアウトさせよ。
+  $('#q3').click(function () { // id="q3" にクリックイベントを設定
+    $(this).fadeOut(2000);  // 呼び出し元の要素(#q2)を 2000ミリ秒 = 2秒 掛けてフェードアウト
+  });
+
 // 第4問  id='q4'の要素をクリックしたらこの要素の前後とこの要素内の前後にテキストを挿入せよ。
+  $('#q4').click(function () { // id="q4" にクリックイベントを設定
+    var inserted_text = $('<span>').html('<span>inserted text</span>').addClass('q4__inserted_text'); // 追加する要素を設定
+    $(this).before(inserted_text.clone().text('q4の前'));  // #q4 要素の直前に要素を追加
+    $(this).prepend(inserted_text.clone().text('q4の中の前側')); // #q4 要素の中の始め側に要素を追加
+    $(this).append(inserted_text.clone().text('q4の中の後側'));  // #q4 要素の中の終わり側に要素を追加
+    $(this).after(inserted_text.clone().text('q4の後'));   // #q4 要素の直後に要素を追加
+  });
+
 // 第5問  id='q5'の要素をクリックしたらこの要素にlargeというクラスを付与せよ。
+  $('#q5').click(function () { // id="q5" にクリックイベントを設定
+    $(this).addClass('large'); // クラスを追加
+  });
+
 // 第6問  id='q6'の要素をクリックしたらこの要素を2秒かけてmargin-topとmargin-leftを100pxの位置に移動させよ。
+  $('#q6').click(function() { // id="q6" にクリックイベントを設定
+    $(this).animate({ // スタイルの変更を 2000ミリ秒で行う
+      'margin-top': '100px',
+      'margin-left': '100px',
+    }, 2000);
+  });
+
 // 第7問  id='q7'の子要素をクリックしたら、その要素のインデックス（何番目か）をconsole.log()とalert()を用いて表示させよ。
+  $('#q7').children().click(function() { // id="q7" の子要素全てにクリックイベントを設定
+    var index = $(this).index(); // $(this) (-> #q7の子要素) の中でのインデックスを取得
+    console.log(index); // コンソールに出力
+    alert(index); // アラートを表示
+  });
+
 // 第8問  id='q8'の要素をhoverしたらlargeというクラスを付与し、hoverが外れたら、クラスを削除せよ。
+  $('#q8').hover(function() { // id="q8" にhoverイベントを設定 (mouseenter と mouseleave の一括設定)
+    $(this).addClass('large'); // large クラスを付与
+  }, function() {
+    $(this).removeClass('large'); // large クラスを除外
+  });
+
 // 第9問  id='q9'の要素をクリックしたらこの要素に設定してあるdata属性をconsoleに表示せよ。
+  $('#q9').click(function() { // id="q9" にクリックイベントを設定
+    var data = $(this).data('text'); // #q9 の data-text の値を取得
+    console.log(data); // コンソールに データを表示
+  });
+
 // 第10問 id='q10'の子要素をクリックしたら、その要素のインデックスと等しいid='q11'の子要素にlargeというクラスを追加せよ。
+  $('#q10').children().click(function (){
+    var index = $(this).index(); // クリックされた要素のインデックスを index に代入
+    $('#q11')
+      .children() // #q11の子要素
+      .eq(index)  // の index 番目の要素を取得
+      .addClass('large'); // large クラスを付与
+  });
+
 </script>
 </body>
 </html>
