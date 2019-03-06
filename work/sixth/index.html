@@ -26,6 +26,18 @@
       // .keyup() 文字入力後に発火されるイベントです。
       // .replace(/\s+/g,'').length 改行を含まない文字数を取得します。
       // .val() input要素のvalueを取得します。
+      (function() {
+        $('.input').keyup(function () {
+          var len = $(this).val().replace(/\s+/g, '').length; // 名前欄の文字数を取得
+          var rest = 30 - len; // 可能な残り文字数を計算
+          if (rest < 0) {
+            $('.rest-count').addClass('red'); // 0以下で赤くする
+          } else {
+            $('.rest-count').removeClass('red'); // 0以下で赤を解除
+          }
+          $('.rest-count').text(rest); // 残り文字数の表示を更新
+        });
+      })();
     </script>
   </body>
 </html>
