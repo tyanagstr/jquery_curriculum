@@ -11,77 +11,16 @@
   </head>
   <body>
     <div class="wrapper">
-      <div class="contents">
-        <p class="title">Frameworks</p>
-        <div class="select-wrapper">
-          <select class="select">
-            <option value="all">All</option>
-            <option value="css">CSS</option>
-            <option value="javascript">JavaScript</option>
-            <option value="php">PHP</option>
-            <option value="ruby">Ruby</option>
-            <option value="python">Python</option>
-            <option value="scala">Scala</option>
-          </select>
+        <div class="contents">
+          <p class="title">Frameworks</p>
+          <div class="select-wrapper">
+            <select class="select">
+              <option value="all">All</option>
+            </select>
+          </div>
+          <ul class="list"></ul>
         </div>
-        <ul class="list">
-          <li data-category-type="css">
-            <a href="http://getbootstrap.com/" class="article">
-              <i class="article-icon is-bootstrap"></i>
-              <p class="article-name">Bootstrap</p>
-            </a>
-          </li>
-          <li data-category-type="ruby">
-            <a href="http://rubyonrails.org/" class="article">
-              <i class="article-icon is-ruby-on-rails"></i>
-              <p class="article-name">Ruby on Rails</p>
-            </a>
-          </li>
-          <li data-category-type="php">
-            <a href="https://phalconphp.com/ja/" class="article">
-              <i class="article-icon is-phalcon"></i>
-              <p class="article-name">Phalcon</p>
-            </a>
-          </li>
-          <li data-category-type="javascript">
-            <a href="https://facebook.github.io/react/" class="article">
-              <i class="article-icon is-react"></i>
-              <p class="article-name">React</p>
-            </a>
-          </li>
-          <li data-category-type="scala">
-            <a href="https://www.playframework.com/" class="article">
-              <i class="article-icon is-play"></i>
-              <p class="article-name">Play</p>
-            </a>
-          </li>
-          <li data-category-type="javascript">
-            <a href="http://aurelia.io/" class="article">
-              <i class="article-icon is-aurelia"></i>
-              <p class="article-name">Aurelia</p>
-            </a>
-          </li>
-          <li data-category-type="python">
-            <a href="http://djangoproject.jp/" class="article">
-              <i class="article-icon is-django"></i>
-              <p class="article-name">Django</p>
-            </a>
-          </li>
-          <li data-category-type="css">
-            <a href="http://www.material-ui.com/#/" class="article">
-              <i class="article-icon is-material-ui"></i>
-              <p class="article-name">Material UI</p>
-            </a>
-          </li>
-          <li data-category-type="php">
-            <a href="https://laravel.com/" class="article">
-              <i class="article-icon is-laravel"></i>
-              <p class="article-name">Laravel</p>
-            </a>
-          </li>
-        </ul>
       </div>
-    </div>
     <script src="../../common/js/jquery.js"></script>
     <script>
       // 今回やるのはソート機能です。
@@ -97,19 +36,86 @@
       // .data('') DOM要素にあるdata-~を取得できる
       // .change() セレクトボックスの値の変更をキャッチする関数
       // $().each() DOM要素を1つずつループ処理をする（ループ内で$(this)を使うと要素がひとつずつ取得できる）
-      (function() {
-        $('.select').change(function() {
-          var selected = $(this).val(); // セレクトボックスの選ばれた要素を取得
-          $('.list').children().each(function() {     // リストの子要素すべてについて 以下の処理
-            var type = $(this).data('category-type'); // data-category-type の値を取得
-            if (selected === 'all' || selected == type) {
-              $(this).show();                     // セレクトボックスの値が all または category-type と一致するとき表示
-            } else {
-              $(this).hide();                     // セレクトボックスの値と要素の category-typeが違うときは隠す
-            }
-          });
+      // ---- Contorl ----
+      function Frameworks() {
+        this.$select = $('.select');
+        this.$list = $('.list');
+        this.categories;
+        this.frameworks;
+        this.init();
+      }
+
+      Frameworks.prototype.init = function() {
+        this.fetch().then(function(data) {
+          this.categories = data.categories;
+          this.frameworks = data.frameworks;
+          this.renderCategories(this.categories);
+          this.renderFrameworks(this.frameworks);
+          this.bind();
+        }.bind(this));
+      };
+
+      Frameworks.prototype.bind = function() {
+        this.$select.on('change', this.changeHandler.bind(this));
+      }
+
+      Frameworks.prototype.changeHandler = function(event) {
+        var selectedVal = this.$select.val();
+        var list = selectedVal === 'all' ? this.frameworks : this.filterFrameworks(selectedVal);
+        this.renderFrameworks(list);
+      }
+
+      Frameworks.prototype.filterFrameworks = function (category) {
+        return this.frameworks.filter(function (item) {
+          return category === item.categoryType;
         });
-      })();
+      }
+
+      // ---- Model ----
+      Frameworks.prototype.fetch = function() {
+        var dfd = $.Deferred();
+        $.ajax({
+          url: './data.json'
+        })
+        .done(function(data) {
+          dfd.resolve(data)
+        })
+        return dfd.promise();
+      }
+
+      // ---- View ----
+      Frameworks.prototype.renderCategories = function(categoires) {
+        this.$select.append(this.getSelectTemplate(categoires));
+      }
+      Frameworks.prototype.getSelectTemplate = function(array) {
+        return array.map(function(item) {
+          return ('<option value="'+ item.categoryType +'">' + 
+            item.categoryName + '</option>');
+        }).join('');
+      }
+
+      Frameworks.prototype.renderFrameworks = function(frameworks) {
+        this.$list.html(this.getFrameworksTemplate(frameworks));
+      }
+      Frameworks.prototype.getFrameworksTemplate = function(array) {
+        return array
+          .map(function(item){
+            return (
+              '<li>' +
+              '<a href="' + item.frameworkURL + '" class="article">' +
+              '<i class="article-icon is-' + item.frameworkType + '"></i>' +
+              '<p class="article-name">' + item.frameworkName + '</p>' +
+              '</a>' +
+              '</li>'
+              );
+          })
+          .join('');
+      }
+
+
+      $(function() {
+        var frameworks = new Frameworks();
+      });
     </script>
   </body>
 </html>

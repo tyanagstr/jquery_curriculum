@@ -1,0 +1,84 @@
+{
+  "categories": [
+    {
+      "categoryName": "CSS",
+      "categoryType": "css"
+    },
+    {
+      "categoryName": "JavaScript",
+      "categoryType": "javascript"
+    },
+    {
+      "categoryName": "PHP",
+      "categoryType": "php"
+    },
+    {
+      "categoryName": "Ruby",
+      "categoryType": "ruby"
+    },
+    {
+      "categoryName": "Python",
+      "categoryType": "python"
+    },
+    {
+      "categoryName": "Scala",
+      "categoryType": "scala"
+    }
+  ],
+  "frameworks": [
+    {
+      "frameworkName": "Bootstrap",
+      "frameworkType": "bootstrap",
+      "frameworkURL": "http://getbootstrap.com/",
+      "categoryType": "css"
+    },
+    {
+      "frameworkName": "Ruby on Rails",
+      "frameworkType": "ruby-on-rails",
+      "frameworkURL": "http://rubyonrails.org/",
+      "categoryType": "ruby"
+    },
+    {
+      "frameworkName": "Phalcon",
+      "frameworkType": "phalcon",
+      "frameworkURL": "https://phalconphp.com/ja/",
+      "categoryType": "php"
+    },
+    {
+      "frameworkName": "React",
+      "frameworkType": "react",
+      "frameworkURL": "https://facebook.github.io/react/",
+      "categoryType": "javascript"
+    },
+    {
+      "frameworkName": "Play",
+      "frameworkType": "play",
+      "frameworkURL": "https://www.playframework.com/",
+      "categoryType": "scala"
+    },
+    {
+      "frameworkName": "Aurelia",
+      "frameworkType": "aurelia",
+      "frameworkURL": "http://aurelia.io/",
+      "categoryType": "javascript"
+    },
+    {
+      "frameworkName": "Django",
+      "frameworkType": "django",
+      "frameworkURL": "http://djangoproject.jp/",
+      "categoryType": "python"
+    },
+    {
+      "frameworkName": "Material UI",
+      "frameworkType": "material-ui",
+      "frameworkURL": "http://www.material-ui.com/#/",
+      "categoryType": "css"
+    },
+    {
+      "frameworkName": "Laravel",
+      "frameworkType": "laravel",
+      "frameworkURL": "https://laravel.com/",
+      "categoryType": "php"
+    }
+  ]
+}
