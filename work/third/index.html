@@ -25,7 +25,11 @@
     <script src="../../common/js/jquery.js"></script>
     <script>
       // 今回やるのはタブメニューです。
-      // navの小要素であるliをクリックして、contents内の小要素であるli要素を表示させる。
+      // .index() 要素のindexを取得します。
+      // .eq() 引数に応じたindexの要素を指定します。
+      // .addClass() クラスを追加します。
+      // .removeClass() クラスを削除します。
+      // navの子要素であるliをクリックして、contents内の子要素であるli要素を表示させる。
       (function() {
         var HIDDEN_CLASS = 'is-hidden';
         $('.nav').children().click(function () {
@@ -38,10 +42,6 @@
             .addClass(HIDDEN_CLASS);
         });
       }) ();
-      // .index() 要素のindexを取得します。
-      // .eq() 引数に応じたindexの要素を指定します。
-      // .addClass() クラスを追加します。
-      // .removeClass() クラスを削除します。
     </script>
   </body>
 </html>
