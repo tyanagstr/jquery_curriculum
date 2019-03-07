@@ -28,14 +28,33 @@
       // .fadeIn() 一定時間かけてフェードインする。
       // .fadeOut() 一定時間かけてフェードアウトする。
       (function() {
-        var duration = 300;
+        // オブジェクト指向バージョン
+        /** Modal クラス
+          モーダルダイアログを表す。
+        */
+        function Modal () {
+          this.$modal = $('.modal');
+          this.$modalShow = $('.modal-show');
+          this.$modalClose = $('.modal-close');
+          this.ANIMATE_TIME = 500;
+          this.bind();
+        }
 
-        $('.modal-show').click(function() {
-          $('.modal').fadeIn(duration);
-        });
+        Modal.prototype.bind = function () { 
+          this.$modalShow.on('click', this.show.bind(this));
+          this.$modalClose.on('click', this.hide.bind(this));
+        }
 
-        $('.modal-close').click(function() {
-          $('.modal').fadeOut(duration);
+        Modal.prototype.show = function () {
+          this.$modal.fadeIn(this.ANIMATE_TIME);
+        }
+
+        Modal.prototype.hide = function () {
+          this.$modal.fadeOut(this.ANIMATE_TIME);
+        }
+
+        $(function() {
+          var modal = new Modal();
         });
       })();
     </script>
