@@ -42,19 +42,52 @@
       // </li>
       //
       // このテンプレートに取得してきた中身を入れて表示します。
-      $.ajax({
-        url: './data.json'
-      }).done(function(data) {
-        $.each(data.colorsArray, function(index, item) { // data.colorsArray内の要素それぞれに処理する
-          $('.colorList').append( // .colorList の子要素に以下の要素を追加
-            $('<li>').addClass('colorList__item').append(
-              $('<p>').addClass('colorList__title')
-                .css('background-color', item.hexValue)
-                .text(item.colorName)
+
+      $(function () {
+        // --- Controller ---
+        function Colors() {
+          this.$colorList = $('.colorList');
+          this.init();
+        }
+        
+        Colors.prototype.init = function() {
+          this.fetch().then(function(data) {
+            this.render(this.getTemplate(data.colorsArray));
+          }.bind(this));
+        }
+
+        // --- Model ---
+        Colors.prototype.fetch = function() {
+          var dfd = $.Deferred();
+          $.ajax({
+            url: './data.json'
+          })
+          .done(function(data) {
+            dfd.resolve(data);
+          });
+          return dfd.promise();
+        }
+
+        // --- View ---
+        Colors.prototype.getTemplate = function(array) {
+          return array.map(function(color) {
+            return (
+              '<li class="colorList__item">' +
+                '<p class="colorList__title" style="background-color:'+ color.hexValue +';">'+
+                    color.colorName +'</p>' +
+              '</li>'
             )
-          );
-        });
-      })
+          }).join('');
+        }
+
+        Colors.prototype.render = function(template) {
+          this.$colorList.html(template);
+        }
+
+        $(function() {
+          var colors = new Colors();
+        })
+      });
     </script>
   </body>
 </html>
