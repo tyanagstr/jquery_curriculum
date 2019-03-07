@@ -26,18 +26,34 @@
       // .keyup() 文字入力後に発火されるイベントです。
       // .replace(/\s+/g,'').length 改行を含まない文字数を取得します。
       // .val() input要素のvalueを取得します。
-      (function() {
-        $('.input').keyup(function () {
-          var len = $(this).val().replace(/\s+/g, '').length; // 名前欄の文字数を取得
-          var rest = 30 - len; // 可能な残り文字数を計算
-          if (rest < 0) {
-            $('.rest-count').addClass('red'); // 0以下で赤くする
+      $(function() {
+        var LetterCounter = function () {
+          this.$input = $('.input'); 
+          this.$restCount = $('.rest-count'); 
+          this.MAX_LETTERS =  30;
+          this.ON_ERROR_CLASS = 'red' // エラー時に付与するcssクラス
+
+          this.bind(); // イベントリスナの設定
+        }
+
+        LetterCounter.prototype.bind = function () {
+          this.$input.on('keyup', this.updateRest.bind(this));
+        }
+        
+        // 文字数をカウントし、表示に反映する
+        LetterCounter.prototype.updateRest = function(event) {
+          var value = $(event.target).val();
+          var strLength = value.replace(/\s+/g, '').length;
+          if (this.MAX_LETTERS < strLength) {
+            this.$restCount.addClass(this.ON_ERROR_CLASS);
           } else {
-            $('.rest-count').removeClass('red'); // 0以下で赤を解除
+            this.$restCount.removeClass(this.ON_ERROR_CLASS);
           }
-          $('.rest-count').text(rest); // 残り文字数の表示を更新
-        });
-      })();
+          this.$restCount.text(this.MAX_LETTERS - strLength);
+        }
+
+        var letterCounter = new LetterCounter();
+      })
     </script>
   </body>
 </html>
