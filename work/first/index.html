@@ -73,9 +73,8 @@
   $('#q1').css('color', '#f00'); // id="q1" の要素にスタイル { color: #f00 } を設定
 
   // 第2問  id='q2'の要素をクリックしたら背景色をピンクにせよ。
-  $('#q2').click(function () { // id="q2" にクリックイベントを設定
+  $('#q2').on('click', function () { // id="q2" にクリックイベントを設定
     $(this)                              // 呼び出し元の要素 (#q2) を指定
-      .parent()                          // 親要素を選択
       .css('background-color', '#fbb');  // スタイル { background-color: #fbb } を設定
   });
 
@@ -107,7 +106,7 @@
   });
 
   // 第7問  id='q7'の子要素をクリックしたら、その要素のインデックス（何番目か）をconsole.log()とalert()を用いて表示させよ。
-  $('#q7').children().click(function () { // id="q7" の子要素全てにクリックイベントを設定
+  $('#q7').find('li').click(function () { // id="q7" の子要素全てにクリックイベントを設定
     var index = $(this).index(); // $(this) (-> #q7の子要素) の中でのインデックスを取得
     console.log(index); // コンソールに出力
     alert(index); // アラートを表示
@@ -127,14 +126,13 @@
   });
 
   // 第10問 id='q10'の子要素をクリックしたら、その要素のインデックスと等しいid='q11'の子要素にlargeというクラスを追加せよ。
-  $('#q10').children().click(function () {
+  $('#q10').find('li').click(function () {
     var index = $(this).index(); // クリックされた要素のインデックスを index に代入
     $('#q11')
-      .children() // #q11の子要素
+      .find('li') // #q11の子要素
       .eq(index)  // の index 番目の要素を取得
       .addClass('large'); // large クラスを付与
   });
-
 </script>
 </body>
 </html>
