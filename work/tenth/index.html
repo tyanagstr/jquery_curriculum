@@ -76,17 +76,25 @@
         };
 
         // エラーなどの表示を行う 
-        var showMessage = function(message) {
-          $('.lists').children().remove();
-          $('.lists').html(
-            $(`<pre class="lists__message">` + message + `</pre>`)
-            .css('text-align', 'center'));
+        /**
+          @param {string[]} messages
+        */
+        var showMessage = function(messages) {
+          var $lists = $('.lists');
+          $lists.children().remove();
+          var $wrapper = $('<div>').css({
+            'text-align': 'center'
+          });
+          for (var i = 0; i < messages.length; i++) {
+            $wrapper.append( $('<p>').text(messages[i]))
+          }
+          $lists.append($wrapper);
         };
 
         // 取得した JSON データを整形して出力する
         var showResult = function(data) {
           if (data.count === 0) { // 検索結果のカウントが 0 
-            showMessage("検索結果がありませんでした。\n別のキーワードをお試しください。");
+            showMessage(["検索結果がありませんでした。", "別のキーワードをお試しください。" ]);
           } else {
             if (searchObj.currentPage === 1) { // currentPage ===1 -> 検索ワードが変わったとき
               $('.lists').children().remove(); // リストの内容を消去
@@ -107,26 +115,29 @@
               );
             })
             $('.lists').prepend(
-              div.unwrap() // 入れ物から取り出した中身(結果のリスト)をリストに追加
+              div.html()
             );
           }
         }
 
         // エラーの表示を行う
         var showError = function (res) {
-          console.log(res);
+          if (res === undefined || res.error === undefined) {
+            showMessage(["通信に失敗しました。","ネットワークの設定を確認してください。" ]);
+            return;
+          }
           switch (res.error) {
             case "wrong_parameter":
-              showMessage("検索ワードが正しくありません。\n別のキーワードをお試しください。");
+              showMessage(["検索ワードが正しくありません。","別のキーワードをお試しください。" ]);
               break;
             case "not_found":
-              showMessage("検索結果が見つかりませんでした。\n別のキーワードをお試しください。")
+              showMessage(["検索結果が見つかりませんでした。","別のキーワードをお試しください。"])
               break;
             case "too_many_requests":
-              showMessage("リクエスト数が上限に達しました。 \nしばらく時間を空けてから、ご利用ください。")
+              showMessage(["リクエスト数が上限に達しました。","しばらく時間を空けてから、ご利用ください。"])
               break;
             default:
-              showMessage("何らかのエラーが発生しました。 \nサイト制作者へお問い合わせください。")
+              showMessage(["何らかのエラーが発生しました。 ","サイト制作者へお問い合わせください。"])
           }
         };
 
