@@ -100,16 +100,20 @@
       (function() {
         $('.select').change(function() {
           var selected = $(this).val(); // セレクトボックスの選ばれた要素を取得
-          $('.list').children().each(function() {     // リストの子要素すべてについて 以下の処理
-            var type = $(this).data('category-type'); // data-category-type の値を取得
-            if (selected === 'all' || selected == type) {
-              $(this).show();                     // セレクトボックスの値が all または category-type と一致するとき表示
-            } else {
-              $(this).hide();                     // セレクトボックスの値と要素の category-typeが違うときは隠す
-            }
-          });
+          $('.list').find('li').hide(); // いったんすべて消す
+          if (selected === 'all') {
+            $('.list').find('li').show();
+          } else {
+            $('.list').find('li').each(function() { 
+              var type = $(this).data('category-type'); // data-category-type の値を取得
+              if (type === selected) {
+                $(this).show();
+              }
+            });
+          }
         });
       })();
+      // === 型一致まで, == 使わない
     </script>
   </body>
 </html>
