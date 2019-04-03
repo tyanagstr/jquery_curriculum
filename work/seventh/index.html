@@ -34,7 +34,7 @@
       // .data() 要素のdata属性を取得します。
       // .width() 要素の幅を取得します。
       // .length 要素の個数を取得します。
-      (function() {
+      $(function() {
         var coords = [0, -600, -1200, -1800]; // 画像の移動先の座標
         var current_index = 0; // 現在の座標に対応するインデックス
         var item_num = coords.length; // 座標列の長さ
@@ -60,7 +60,7 @@
               'left': coords[current_index] + 'px'
           }, 500);
         });
-      })();
+      });
     </script>
   </body>
 </html>

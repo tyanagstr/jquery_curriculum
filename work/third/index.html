@@ -30,7 +30,7 @@
       // .addClass() クラスを追加します。
       // .removeClass() クラスを削除します。
       // navの子要素であるliをクリックして、contents内の子要素であるli要素を表示させる。
-      (function() {
+     $(function() {
         var HIDDEN_CLASS = 'is-hidden';
         $('.nav').find('li').click(function () {
           var index = $(this).index();
@@ -42,4 +42,3 @@
     </script>
   </body>
 </html>
-
