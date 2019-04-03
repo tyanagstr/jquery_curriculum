@@ -114,24 +114,22 @@
             if (searchObj.currentPage === 1) { // currentPage ===1 -> 検索ワードが変わったとき
               $('.lists').children().remove(); // リストの内容を消去
             }
-            var div = $('<div>'); // 20件ごとの結果の入れ物
+            var listHtmls = '';
             $.each(data.Items, function (index, item) {
-              div.append(
-                `<li class='lists__item'>
-                <div class='lists__item__inner'>
-                  <a href='` + item.itemUrl + `' class='lists__item__link' target='_blank'>
-                    <img src='` + item.largeImageUrl + `' class='lists__item__img' alt='`+item.title+`'>
-                    <p class='lists__item__detail'>作品名： `+item.title+`</p>
-                    <p class='lists__item__detail'>作者  ： `+item.author+`</p>
-                    <p class='lists__item__detail'>出版社： `+item.publisherName+`</p>
-                  </a>
-                </div>
-                </li>`
-              );
-            })
-            $('.lists').prepend(
-              div.html()
-            );
+              var itemTemplate =
+                "<li class='lists__item'>" +
+                  "<div class='lists__item__inner'>" +
+                    "<a href='" + item.itemUrl + "' class='lists__item__link' target='_blank'>" +
+                      "<img src='" + item.largeImageUrl + "' class='lists__item__img' alt='"+item.title+"'>" +
+                      "<p class='lists__item__detail'>作品名： "+item.title+"</p>" +
+                      "<p class='lists__item__detail'>作者  ： "+item.author+"</p>" +
+                      "<p class='lists__item__detail'>出版社： "+item.publisherName+"</p>"+
+                    "</a>" +
+                  "</div>" +
+                "</li>";
+                listHtmls += itemTemplate;
+            });
+            $('.lists').prepend(listHtmls);
           }
         }
 
