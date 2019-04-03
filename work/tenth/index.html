@@ -75,21 +75,36 @@
           currentPage: 1
         };
 
-        // エラーなどの表示を行う 
-        /**
-          @param {string[]} messages
-        */
-        var showMessage = function(messages) {
-          var $lists = $('.lists');
-          $lists.children().remove();
-          var $wrapper = $('<div>').css({
-            'text-align': 'center'
-          });
-          for (var i = 0; i < messages.length; i++) {
-            $wrapper.append( $('<p>').text(messages[i]))
+        // 入力内容に基づき検索を行う
+        var search = function () {
+          var word = $('.search__text__input').val().trim();
+          if (word === '') {
+            return
           }
-          $lists.append($wrapper);
-        };
+          if (searchObj.word === word) {
+            searchObj.currentPage++;
+          } else {
+            searchObj.word = word;
+            searchObj.currentPage = 1; 
+          }
+
+          $.ajax({
+            url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
+            type: 'GET',
+            datatype: 'json',
+            data: {
+              applicationId: '1019399324990976605', // (今回はこのIDを使用してください)
+              keyword: searchObj.word, // 検索するワード
+              hits: 20,  // 20件ずつ取得
+              page: searchObj.currentPage, // 取得するページ
+              formatVersion: 2 // フォーマットのバージョンを指定
+            },
+          }).done(function(data) {
+            showResult(data);
+          }).fail(function(res) {
+            showError(res.responseJSON);
+          });
+        }
 
         // 取得した JSON データを整形して出力する
         var showResult = function(data) {
@@ -141,36 +156,21 @@
           }
         };
 
-        // 入力内容に基づき検索を行う
-        var search = function () {
-          var word = $('.search__text__input').val().trim();
-          if (word === '') {
-            return
-          }
-          if (searchObj.word === word) {
-            searchObj.currentPage++;
-          } else {
-            searchObj.word = word;
-            searchObj.currentPage = 1; 
-          }
-
-          $.ajax({
-            url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
-            type: 'GET',
-            datatype: 'json',
-            data: {
-              applicationId: '1019399324990976605', // (今回はこのIDを使用してください)
-              keyword: searchObj.word, // 検索するワード
-              hits: 20,  // 20件ずつ取得
-              page: searchObj.currentPage, // 取得するページ
-              formatVersion: 2 // フォーマットのバージョンを指定
-            },
-          }).done(function(data) {
-            showResult(data);
-          }).fail(function(res) {
-            showError(res.responseJSON);
+        // エラーなどのメッセージ表示を行う 
+        /**
+          @param {string[]} messages
+        */
+        var showMessage = function(messages) {
+          var $lists = $('.lists');
+          $lists.children().remove();
+          var $wrapper = $('<div>').css({
+            'text-align': 'center'
           });
-        }
+          for (var i = 0; i < messages.length; i++) {
+            $wrapper.append( $('<p>').text(messages[i]))
+          }
+          $lists.append($wrapper);
+        };
 
         // クリックイベントの設定
         $('.search__btn').click(function () {
