@@ -56,7 +56,7 @@
       // .next() 要素の隣の要素を取得します。これは使わなくてもできます。
       // .children() 要素の子要素を取得します。
       // .stop() 現在動作中のアニメーション処理を全て中止します。
-      (function() {
+     $(function() {
         $('.menu__list__title').parent('li').hover(function() {
           $(this).find('.menu__list__childList') // タイトルの次の .menu__list__childList を指定
             .stop()          // 一度アニメーションをキャンセル
@@ -66,7 +66,7 @@
             .stop()        // 一度アニメーションをキャンセル
             .slideUp(300); // スライドアップで表示を消す
         });
-      })();
+      });
     </script>
   </body>
 </html>

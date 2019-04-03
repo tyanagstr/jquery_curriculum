@@ -42,7 +42,7 @@
       // .offset().top 要素の位置を取得します。
       // .fadeIn() 要素をフェードインさせる。
       // .fadeOut() 要素をフェードアウトさせる。
-      (function() {
+      $(function() {
         // スクロールによって トップへスクロールするボタンを表示する
         $(window).scroll(function() {
           if ($(window).scrollTop() > 100) {
@@ -71,7 +71,7 @@
             }
           });
         });
-      })();
+      });
     </script>
   </body>
 </html>
